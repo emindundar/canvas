@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,31 +11,25 @@
     canvas {
         border: 1px solid black;
         cursor: crosshair;
-
-    
     }
 </style>
-
 <body>
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid justify-content-start">
+            <span class="navbar-brand mb-0 h1 me-5">Paint</span>
+            <div class="row ">
+                <div class="d-flex">
+                    <button id="lineBtn" class="btn btn-primary me-3">Line</button>
+                    <button id="squareBtn" class="btn btn-primary me-3">Square</button>
+                    <button id="rectangleBtn" class="btn btn-primary me-3">Rectangle</button>
+                </div>
+            </div>
+        </div>
+    </nav>
     <div class="row justify-content-center mt-5">
         <div class="col-8">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Paint</h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="d-flex mb-3">
-                            <button id="lineBtn" class="btn btn-primary me-3">Line</button>
-                            <button id="squareBtn" class="btn btn-primary me-3">Square</button>
-                            <button id="rectangleBtn" class="btn btn-primary me-3">Rectangle</button>
-                        </div>
-                        <hr>
-                    </div>
-                    <div >
-                        <canvas id="canvas" ></canvas>
-                    </div>
-                </div>
+            <div>
+                <canvas id="canvas" width="970" height="450"></canvas>
             </div>
         </div>
     </div>
@@ -47,11 +40,16 @@
 
     let drawing = false;
     let startX, startY;
-    let drawMode="";
+    let drawMode = "";
 
-    document.getElementById("lineBtn").addEventListener("click", () => drawMode="line");
-    document.getElementById("squareBtn").addEventListener("click",()=> drawMode="square");
-    document.getElementById("rectangleBtn").addEventListener("click",()=> drawMode="rectangle");
+    canvas.addEventListener("click", () => {
+        if (drawMode === "") {
+            alert("Please choose a mode");
+        }
+    })
+    document.getElementById("lineBtn").addEventListener("click", () => drawMode = "line");
+    document.getElementById("squareBtn").addEventListener("click", () => drawMode = "square");
+    document.getElementById("rectangleBtn").addEventListener("click", () => drawMode = "rectangle");
 
 
     canvas.addEventListener("mousedown", (e) => {
@@ -60,43 +58,42 @@
         startY = e.offsetY;
     });
     canvas.addEventListener("mousemove", (e) => {
-        if(!drawing) return;
+        if (!drawing) return;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        const endX=e.offsetX;
-        const endY=e.offsetY;
+        const endX = e.offsetX;
+        const endY = e.offsetY;
 
         switch (drawMode) {
             case "line":
-                drawLine(startX,startY,endX,endY);
+                drawLine(startX, startY, endX, endY);
                 break;
             case "square":
-                drawSquare(startX,startY,endX,endY);
+                drawSquare(startX, startY, endX, endY);
                 break;
             case "rectangle":
-                drawRectangle(startX,startY,endX,endY);
+                drawRectangle(startX, startY, endX, endY);
                 break;
-        };  
+        };
 
     });
-    canvas.addEventListener("mouseup",(e)=>{
-        drawing=false;
+    canvas.addEventListener("mouseup", (e) => {
+        drawing = false;
     });
-    function drawLine(x1,y1,x2,y2){
+    function drawLine(x1, y1, x2, y2) {
         ctx.beginPath();
-        ctx.moveTo(x1,y1);
-        ctx.lineTo(x2,y2);
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
         ctx.stroke();
     };
-    function drawSquare(x1,y1,x2,y2){
-        const size=Math.min(Math.abs(x1-x2),Math.abs(y1-y2));
-        ctx.strokeRect(x1,y1,size,size);
+    function drawSquare(x1, y1, x2, y2) {
+        const size = Math.min((x2 - x1), (y2 - y1));
+        ctx.strokeRect(x1, y1, size, size);
 
     };
-    function drawRectangle(x1,y1,x2,y2){
-        const width=x2-x1;
-        const height=y2-y1;
-        ctx.strokeRect(x1,y1,width,height);
-     
-    }
+    function drawRectangle(x1, y1, x2, y2) {
+        const width = x2 - x1;
+        const height = y2 - y1;
+        ctx.strokeRect(x1, y1, width, height);
+    };
 </script>
 </html>
